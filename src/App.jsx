@@ -1176,8 +1176,16 @@ export default function App() {
   const [submitted, setSubmitted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    const token = '8706819174:AAFRoPql1o6myD7PnDJOW2RsaBSup4LIwCc'
+    const chatId = '1575386160'
+    const text = `🚀 Новая заявка с сайта kar-sales.com\n\n👤 Имя: ${formData.name}\n📞 Телефон: ${formData.phone}`
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text })
+    })
     setSubmitted(true)
   }
 
