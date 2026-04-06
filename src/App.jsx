@@ -1179,6 +1179,7 @@ const REVIEWS = [
     text: 'Менеджеры забивали CRM как попало — половина сделок висела без статуса неделями. После К.А.Р за первую неделю нашли 23 зависших лида. Закрыли 7 из них.',
     module: 'Контроль CRM',
     color: '#00F5A0',
+    stat: { value: 23, label: 'зависших лида найдено', prefix: '' },
   },
   {
     name: 'Дина Р.',
@@ -1186,6 +1187,7 @@ const REVIEWS = [
     text: 'Я физически не могла слушать все звонки и читать все переписки. К.А.Р делает это за меня и присылает только критичное. Теперь знаю где теряем деньги.',
     module: 'Анализ коммуникации',
     color: '#6B8EFF',
+    stat: { value: 3, label: 'часа экономии в день', prefix: '' },
   },
   {
     name: 'Максим Т.',
@@ -1193,6 +1195,7 @@ const REVIEWS = [
     text: 'РОП уволился, продажи не упали. Система сама раздаёт задачи, контролирует скорость ответа и присылает дневной отчёт. Я даже не сразу заметил что его нет.',
     module: 'Контроль без собственника',
     color: '#F472B6',
+    stat: { value: 0, label: 'просадки без РОПа', prefix: '' },
   },
   {
     name: 'Сауле Н.',
@@ -1200,6 +1203,7 @@ const REVIEWS = [
     text: 'Раньше план не выполнялся и никто не понимал почему. К.А.Р показал: 40% лидов умирали на этапе «думает». Настроили дожим — конверсия выросла на 18%.',
     module: 'Управление выручкой',
     color: '#F59E0B',
+    stat: { value: 18, label: 'рост конверсии', prefix: '+', suffix: '%' },
   },
   {
     name: 'Тимур А.',
@@ -1207,6 +1211,7 @@ const REVIEWS = [
     text: 'Новые менеджеры раньше обучались 2 месяца. Система анализирует их диалоги и даёт персональные подсказки прямо по конкретным сделкам. Теперь выходят на результат за 3 недели.',
     module: 'Обучение и развитие',
     color: '#00C4D4',
+    stat: { value: 3, label: 'недели до результата', prefix: '' },
   },
   {
     name: 'Алия М.',
@@ -1214,6 +1219,7 @@ const REVIEWS = [
     text: 'Менеджеры имитировали активность — создавали задачи и сразу закрывали. К.А.Р поймал это за 2 дня. Пришлось провести серьёзный разговор с командой.',
     module: 'Контроль CRM',
     color: '#00F5A0',
+    stat: { value: 2, label: 'дня до выявления фрода', prefix: '' },
   },
   {
     name: 'Руслан Б.',
@@ -1221,6 +1227,7 @@ const REVIEWS = [
     text: 'Воронка была чёрным ящиком. Теперь вижу на каком этапе и почему уходят клиенты. Оказалось — проблема в скорости ответа. Сократили с 4 часов до 20 минут.',
     module: 'Аналитика и диагностика',
     color: '#7B61FF',
+    stat: { value: 80, label: 'быстрее ответ клиенту', prefix: '', suffix: '%' },
   },
   {
     name: 'Жанна С.',
@@ -1228,6 +1235,7 @@ const REVIEWS = [
     text: 'Подбор менеджеров был лотереей. К.А.Р анализирует тестовые задания и прогнозирует потенциал кандидата. Последние 4 найма — все сильные, никто не ушёл за испытательный срок.',
     module: 'Рекрутинг и подбор',
     color: '#A78BFA',
+    stat: { value: 4, label: 'удачных найма подряд', prefix: '' },
   },
   {
     name: 'Ерлан Д.',
@@ -1235,6 +1243,7 @@ const REVIEWS = [
     text: 'Антикризисный режим сработал когда продажи упали на 30% в декабре. Система сама перестроила приоритеты, сформировала задачи — январь закрыли в плюс.',
     module: 'Управление системой продаж',
     color: '#34D399',
+    stat: { value: 30, label: 'падение — закрыли в плюс', prefix: '-', suffix: '%' },
   },
   {
     name: 'Карина В.',
@@ -1242,6 +1251,7 @@ const REVIEWS = [
     text: 'Отчёты раньше делались вручную и занимали 3 часа. Теперь утром открываю дашборд и за 5 минут понимаю всё что происходит в отделе. Голова свободна для стратегии.',
     module: 'Визуализация и интерфейс',
     color: '#60A5FA',
+    stat: { value: 5, label: 'минут на утренний разбор', prefix: '' },
   },
   {
     name: 'Нурлан О.',
@@ -1249,6 +1259,7 @@ const REVIEWS = [
     text: 'Задачи ставились, но никто их не выполнял вовремя. Автоматические напоминания и реакция на бездействие изменили дисциплину за 2 недели без моего участия.',
     module: 'Автоматические действия',
     color: '#EF4444',
+    stat: { value: 2, label: 'недели до смены дисциплины', prefix: '' },
   },
   {
     name: 'Асель Т.',
@@ -1256,6 +1267,7 @@ const REVIEWS = [
     text: 'Думала что все менеджеры работают одинаково. К.А.Р показал разрыв в 3 раза между лучшим и худшим. Перераспределила лиды — выручка выросла без найма новых людей.',
     module: 'Аналитика и диагностика',
     color: '#7B61FF',
+    stat: { value: 3, label: 'кратный разрыв выявлен', prefix: 'x' },
   },
   {
     name: 'Игорь Ф.',
@@ -1263,8 +1275,41 @@ const REVIEWS = [
     text: 'Скрипты устарели, а менеджеры всё равно их не соблюдали. Система анализирует реальные переписки и предлагает улучшенные формулировки. Конверсия переписок +22%.',
     module: 'Анализ коммуникации',
     color: '#6B8EFF',
+    stat: { value: 22, label: 'конверсия переписок', prefix: '+', suffix: '%' },
   },
 ]
+
+function ReviewStat({ stat, color, animKey }) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    setCount(0)
+    if (stat.value === 0) return
+    const duration = 1200
+    const steps = 40
+    const increment = stat.value / steps
+    let current = 0
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= stat.value) {
+        setCount(stat.value)
+        clearInterval(timer)
+      } else {
+        setCount(Math.floor(current))
+      }
+    }, duration / steps)
+    return () => clearInterval(timer)
+  }, [animKey, stat.value])
+
+  return (
+    <div className="flex items-center gap-3 rounded-xl px-4 py-3 mt-1" style={{ background: color + '15', border: `1px solid ${color}33` }}>
+      <span className="text-2xl font-bold" style={{ color }}>
+        {stat.prefix}{count}{stat.suffix}
+      </span>
+      <span className="text-slate-400 text-xs leading-tight">{stat.label}</span>
+    </div>
+  )
+}
 
 function ReviewsCarousel() {
   const [current, setCurrent] = useState(0)
@@ -1329,6 +1374,7 @@ function ReviewsCarousel() {
                         <p className="text-white font-semibold text-sm">{r.name}</p>
                         <p className="text-slate-500 text-xs mt-0.5">{r.role}</p>
                       </div>
+                      <ReviewStat stat={r.stat} color={r.color} animKey={current} />
                       <div className="flex gap-1">
                         {Array.from({ length: 5 }).map((_, k) => (
                           <svg key={k} viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
@@ -1358,6 +1404,7 @@ function ReviewsCarousel() {
             <p className="text-white font-semibold text-sm">{REVIEWS[current].name}</p>
             <p className="text-slate-500 text-xs mt-0.5">{REVIEWS[current].role}</p>
           </div>
+          <ReviewStat stat={REVIEWS[current].stat} color={REVIEWS[current].color} animKey={current} />
           <div className="flex gap-1">
             {Array.from({ length: 5 }).map((_, k) => (
               <svg key={k} viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
