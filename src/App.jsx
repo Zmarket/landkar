@@ -1769,7 +1769,7 @@ export default function App() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(123,97,255,0.07) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(0,245,160,0.05) 0%, transparent 60%)' }} />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 overflow-hidden">
           <FadeIn className="text-center mb-16">
             <p className="text-sm font-semibold tracking-widest uppercase mb-3" style={{ color: '#7B61FF' }}>ДНК системы</p>
             <h2 className="text-3xl md:text-5xl font-black text-white mb-5">
@@ -1782,15 +1782,17 @@ export default function App() {
           </FadeIn>
 
           {/* Sphere + Facts */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-4 lg:gap-12 items-center mb-16">
 
             {/* Left: sphere */}
-            <FadeIn className="flex justify-center overflow-visible">
-              <KarSphere />
+            <FadeIn className="flex justify-center overflow-hidden">
+              <div className="scale-[0.65] sm:scale-[0.85] lg:scale-100 origin-center">
+                <KarSphere />
+              </div>
             </FadeIn>
 
             {/* Right: 3 facts */}
-            <div className="space-y-5">
+            <div className="space-y-5 min-w-0">
 
               {/* Fact 1 */}
               <FadeIn delay={0.1}>
