@@ -1171,6 +1171,225 @@ function KarLogo({ size = 'md' }) {
 }
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
+// ─── Reviews Carousel ────────────────────────────────────────────────────────
+const REVIEWS = [
+  {
+    name: 'Азамат К.',
+    role: 'Руководитель отдела продаж, Алматы',
+    text: 'Менеджеры забивали CRM как попало — половина сделок висела без статуса неделями. После К.А.Р за первую неделю нашли 23 зависших лида. Закрыли 7 из них.',
+    module: 'Контроль CRM',
+    color: '#00F5A0',
+  },
+  {
+    name: 'Дина Р.',
+    role: 'Собственник, e-commerce',
+    text: 'Я физически не могла слушать все звонки и читать все переписки. К.А.Р делает это за меня и присылает только критичное. Теперь знаю где теряем деньги.',
+    module: 'Анализ коммуникации',
+    color: '#6B8EFF',
+  },
+  {
+    name: 'Максим Т.',
+    role: 'Коммерческий директор, B2B',
+    text: 'РОП уволился, продажи не упали. Система сама раздаёт задачи, контролирует скорость ответа и присылает дневной отчёт. Я даже не сразу заметил что его нет.',
+    module: 'Контроль без собственника',
+    color: '#F472B6',
+  },
+  {
+    name: 'Сауле Н.',
+    role: 'Директор по продажам, недвижимость',
+    text: 'Раньше план не выполнялся и никто не понимал почему. К.А.Р показал: 40% лидов умирали на этапе «думает». Настроили дожим — конверсия выросла на 18%.',
+    module: 'Управление выручкой',
+    color: '#F59E0B',
+  },
+  {
+    name: 'Тимур А.',
+    role: 'CEO, SaaS стартап',
+    text: 'Новые менеджеры раньше обучались 2 месяца. Система анализирует их диалоги и даёт персональные подсказки прямо по конкретным сделкам. Теперь выходят на результат за 3 недели.',
+    module: 'Обучение и развитие',
+    color: '#00C4D4',
+  },
+  {
+    name: 'Алия М.',
+    role: 'Руководитель, розничная сеть',
+    text: 'Менеджеры имитировали активность — создавали задачи и сразу закрывали. К.А.Р поймал это за 2 дня. Пришлось провести серьёзный разговор с командой.',
+    module: 'Контроль CRM',
+    color: '#00F5A0',
+  },
+  {
+    name: 'Руслан Б.',
+    role: 'Собственник, автодилер',
+    text: 'Воронка была чёрным ящиком. Теперь вижу на каком этапе и почему уходят клиенты. Оказалось — проблема в скорости ответа. Сократили с 4 часов до 20 минут.',
+    module: 'Аналитика и диагностика',
+    color: '#7B61FF',
+  },
+  {
+    name: 'Жанна С.',
+    role: 'HRD, торговая компания',
+    text: 'Подбор менеджеров был лотереей. К.А.Р анализирует тестовые задания и прогнозирует потенциал кандидата. Последние 4 найма — все сильные, никто не ушёл за испытательный срок.',
+    module: 'Рекрутинг и подбор',
+    color: '#A78BFA',
+  },
+  {
+    name: 'Ерлан Д.',
+    role: 'Партнёр, юридический бизнес',
+    text: 'Антикризисный режим сработал когда продажи упали на 30% в декабре. Система сама перестроила приоритеты, сформировала задачи — январь закрыли в плюс.',
+    module: 'Управление системой продаж',
+    color: '#34D399',
+  },
+  {
+    name: 'Карина В.',
+    role: 'Директор, образовательный центр',
+    text: 'Отчёты раньше делались вручную и занимали 3 часа. Теперь утром открываю дашборд и за 5 минут понимаю всё что происходит в отделе. Голова свободна для стратегии.',
+    module: 'Визуализация и интерфейс',
+    color: '#60A5FA',
+  },
+  {
+    name: 'Нурлан О.',
+    role: 'Собственник, строительная компания',
+    text: 'Задачи ставились, но никто их не выполнял вовремя. Автоматические напоминания и реакция на бездействие изменили дисциплину за 2 недели без моего участия.',
+    module: 'Автоматические действия',
+    color: '#EF4444',
+  },
+  {
+    name: 'Асель Т.',
+    role: 'Руководитель продаж, медклиника',
+    text: 'Думала что все менеджеры работают одинаково. К.А.Р показал разрыв в 3 раза между лучшим и худшим. Перераспределила лиды — выручка выросла без найма новых людей.',
+    module: 'Аналитика и диагностика',
+    color: '#7B61FF',
+  },
+  {
+    name: 'Игорь Ф.',
+    role: 'COO, логистическая компания',
+    text: 'Скрипты устарели, а менеджеры всё равно их не соблюдали. Система анализирует реальные переписки и предлагает улучшенные формулировки. Конверсия переписок +22%.',
+    module: 'Анализ коммуникации',
+    color: '#6B8EFF',
+  },
+]
+
+function ReviewsCarousel() {
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const total = REVIEWS.length
+
+  useEffect(() => {
+    if (paused) return
+    const t = setInterval(() => setCurrent(c => (c + 1) % total), 4000)
+    return () => clearInterval(t)
+  }, [paused, total])
+
+  const prev = () => { setPaused(true); setCurrent(c => (c - 1 + total) % total) }
+  const next = () => { setPaused(true); setCurrent(c => (c + 1) % total) }
+
+  const visible = [
+    REVIEWS[(current - 1 + total) % total],
+    REVIEWS[current],
+    REVIEWS[(current + 1) % total],
+  ]
+
+  return (
+    <section className="py-24 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 md:px-12">
+        <div className="text-center mb-14">
+          <p className="text-sm font-semibold tracking-widest uppercase mb-3" style={{ color: '#00F5A0' }}>Отзывы</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">Что говорят клиенты</h2>
+          <p className="text-slate-400 mt-3 text-base">Реальные результаты от реальных компаний</p>
+        </div>
+
+        <div className="relative flex items-center gap-4">
+          {/* Prev */}
+          <button onClick={prev} className="hidden md:flex shrink-0 w-10 h-10 rounded-full items-center justify-center border border-slate-700 text-slate-400 hover:border-[#00F5A0] hover:text-[#00F5A0] transition-colors cursor-pointer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          </button>
+
+          {/* Cards */}
+          <div className="flex gap-5 w-full overflow-hidden">
+            {visible.map((r, i) => {
+              const isCenter = i === 1
+              return (
+                <div
+                  key={r.name + i}
+                  className="rounded-2xl p-6 flex flex-col gap-4 transition-all duration-500 cursor-pointer"
+                  style={{
+                    flex: isCenter ? '0 0 calc(50% - 10px)' : '0 0 calc(25% - 10px)',
+                    background: isCenter ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                    border: isCenter ? `1px solid ${r.color}44` : '1px solid rgba(255,255,255,0.05)',
+                    opacity: isCenter ? 1 : 0.45,
+                    transform: isCenter ? 'scale(1)' : 'scale(0.95)',
+                    display: i === 0 ? 'none' : 'flex',
+                  }}
+                  onClick={() => { setPaused(true); setCurrent((current + i - 1 + total) % total) }}
+                >
+                  {isCenter && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: r.color + '22', color: r.color }}>{r.module}</span>
+                      </div>
+                      <p className="text-slate-200 text-base leading-relaxed flex-1">"{r.text}"</p>
+                      <div>
+                        <p className="text-white font-semibold text-sm">{r.name}</p>
+                        <p className="text-slate-500 text-xs mt-0.5">{r.role}</p>
+                      </div>
+                      <div className="flex gap-1">
+                        {Array.from({ length: 5 }).map((_, k) => (
+                          <svg key={k} viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {!isCenter && (
+                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-4">"{r.text}"</p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Next */}
+          <button onClick={next} className="hidden md:flex shrink-0 w-10 h-10 rounded-full items-center justify-center border border-slate-700 text-slate-400 hover:border-[#00F5A0] hover:text-[#00F5A0] transition-colors cursor-pointer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+
+        {/* Mobile single card */}
+        <div className="md:hidden mt-6 rounded-2xl p-6 flex flex-col gap-4" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${REVIEWS[current].color}44` }}>
+          <span className="text-xs font-semibold px-2 py-0.5 rounded-full self-start" style={{ background: REVIEWS[current].color + '22', color: REVIEWS[current].color }}>{REVIEWS[current].module}</span>
+          <p className="text-slate-200 text-base leading-relaxed">"{REVIEWS[current].text}"</p>
+          <div>
+            <p className="text-white font-semibold text-sm">{REVIEWS[current].name}</p>
+            <p className="text-slate-500 text-xs mt-0.5">{REVIEWS[current].role}</p>
+          </div>
+          <div className="flex gap-1">
+            {Array.from({ length: 5 }).map((_, k) => (
+              <svg key={k} viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-yellow-400"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            ))}
+          </div>
+          <div className="flex justify-between mt-2">
+            <button onClick={prev} className="text-slate-400 hover:text-white transition-colors cursor-pointer">← Назад</button>
+            <span className="text-slate-500 text-sm">{current + 1} / {total}</span>
+            <button onClick={next} className="text-slate-400 hover:text-white transition-colors cursor-pointer">Вперёд →</button>
+          </div>
+        </div>
+
+        {/* Dots */}
+        <div className="hidden md:flex justify-center gap-2 mt-8">
+          {REVIEWS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => { setPaused(true); setCurrent(i) }}
+              className="transition-all duration-300 rounded-full cursor-pointer"
+              style={{
+                width: i === current ? 24 : 8,
+                height: 8,
+                background: i === current ? '#00F5A0' : 'rgba(255,255,255,0.2)',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function App() {
   const [formData, setFormData] = useState({ name: '', phone: '' })
   const [submitted, setSubmitted] = useState(false)
@@ -1756,6 +1975,9 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* ── REVIEWS ── */}
+      <ReviewsCarousel />
 
       {/* ── PRICING ── */}
       <section className="py-24" id="pricing">
