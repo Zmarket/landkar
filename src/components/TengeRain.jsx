@@ -18,8 +18,8 @@ function makeDrops(count) {
       left: Math.random() * 100,
       // Tenge characters are larger than logo badges
       size: type === 'tenge' ? 18 + Math.random() * 42 : 11 + Math.random() * 6,
-      duration: 7 + Math.random() * 8,
-      delay: -Math.random() * 18,
+      duration: 9 + Math.random() * 11,
+      delay: -Math.random() * 24,
       drift: (Math.random() - 0.5) * 80,
       rotate: (Math.random() - 0.5) * 220,
       opacity: type === 'tenge' ? 0.18 + Math.random() * 0.32 : 0.35 + Math.random() * 0.3,
