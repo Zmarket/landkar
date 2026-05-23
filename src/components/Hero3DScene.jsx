@@ -9,11 +9,20 @@ function makeDollarTexture(size = 512) {
   canvas.height = size
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, size, size)
-  ctx.fillStyle = '#0A0E1A'
-  ctx.font = `900 ${Math.round(size * 0.78)}px Inter, "Helvetica Neue", Arial, sans-serif`
+  ctx.font = `900 ${Math.round(size * 0.74)}px Inter, "Helvetica Neue", Arial, sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('$', size / 2, size / 2 + size * 0.04)
+  const cx = size / 2
+  const cy = size / 2 + size * 0.04
+  // Bright outer halo for legibility
+  ctx.shadowColor = 'rgba(0, 245, 160, 0.55)'
+  ctx.shadowBlur = size * 0.06
+  ctx.lineWidth = size * 0.04
+  ctx.strokeStyle = '#0A0E1A'
+  ctx.strokeText('$', cx, cy)
+  ctx.shadowBlur = 0
+  ctx.fillStyle = '#0A0E1A'
+  ctx.fillText('$', cx, cy)
   const tex = new THREE.CanvasTexture(canvas)
   tex.anisotropy = 8
   tex.needsUpdate = true
@@ -39,42 +48,38 @@ function DollarCoin() {
 
   useFrame((state, delta) => {
     if (!ref.current) return
-    ref.current.rotation.y += delta * 0.55
-    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.12
+    ref.current.rotation.y += delta * 0.45
+    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.1
   })
 
-  const coinRadius = 1.55
-  const coinThickness = 0.22
+  const coinRadius = 1.05
+  const coinThickness = 0.16
   const faceOffset = coinThickness / 2 + 0.002
 
   return (
-    <Float speed={1.2} rotationIntensity={0.35} floatIntensity={0.6}>
+    <Float speed={1.1} rotationIntensity={0.3} floatIntensity={0.5}>
       <group ref={ref}>
-        {/* Coin body */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[coinRadius, coinRadius, coinThickness, 96]} />
           <meshStandardMaterial
             color="#00F5A0"
             emissive="#00F5A0"
-            emissiveIntensity={0.28}
-            roughness={0.28}
-            metalness={0.9}
+            emissiveIntensity={0.18}
+            roughness={0.35}
+            metalness={0.85}
           />
         </mesh>
-        {/* Inner rim accent */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[coinRadius * 0.88, 0.025, 16, 96]} />
+          <torusGeometry args={[coinRadius * 0.88, 0.018, 16, 96]} />
           <meshStandardMaterial color="#0A0E1A" roughness={0.4} metalness={0.6} />
         </mesh>
-        {/* Front $ */}
         <mesh position={[0, 0, faceOffset]}>
           <planeGeometry args={[coinRadius * 1.85, coinRadius * 1.85]} />
-          <meshBasicMaterial map={dollarTex} transparent alphaTest={0.05} toneMapped={false} />
+          <meshBasicMaterial map={dollarTex} transparent alphaTest={0.04} toneMapped={false} />
         </mesh>
-        {/* Back $ (mirrored to read correctly from the other side) */}
         <mesh position={[0, 0, -faceOffset]} rotation={[0, Math.PI, 0]}>
           <planeGeometry args={[coinRadius * 1.85, coinRadius * 1.85]} />
-          <meshBasicMaterial map={dollarTex} transparent alphaTest={0.05} toneMapped={false} />
+          <meshBasicMaterial map={dollarTex} transparent alphaTest={0.04} toneMapped={false} />
         </mesh>
       </group>
     </Float>
@@ -89,9 +94,9 @@ function WireShell() {
     ref.current.rotation.y -= delta * 0.12
   })
   return (
-    <mesh ref={ref} scale={2.05}>
+    <mesh ref={ref} scale={1.6}>
       <icosahedronGeometry args={[1, 1]} />
-      <meshBasicMaterial color="#7B61FF" wireframe transparent opacity={0.35} />
+      <meshBasicMaterial color="#7B61FF" wireframe transparent opacity={0.22} />
     </mesh>
   )
 }
@@ -132,19 +137,25 @@ function CameraParallax() {
 
 export default function Hero3DScene() {
   return (
-    <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+    <div
+      className="absolute inset-0 pointer-events-none"
+      aria-hidden="true"
+      style={{ opacity: 0.7 }}
+    >
       <Canvas
         dpr={[1, 1.8]}
-        camera={{ position: [0, 0, 5], fov: 50 }}
+        camera={{ position: [0, 0, 5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.35} />
-          <directionalLight position={[5, 5, 5]} intensity={0.8} color="#00F5A0" />
-          <directionalLight position={[-5, -3, -2]} intensity={0.6} color="#7B61FF" />
-          <pointLight position={[0, 0, 3]} intensity={1.2} color="#6B8EFF" />
-          <DollarCoin />
-          <WireShell />
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[5, 5, 5]} intensity={0.6} color="#00F5A0" />
+          <directionalLight position={[-5, -3, -2]} intensity={0.45} color="#7B61FF" />
+          <pointLight position={[0, 0, 3]} intensity={0.9} color="#6B8EFF" />
+          <group position={[2.2, 0.4, 0]}>
+            <DollarCoin />
+            <WireShell />
+          </group>
           <StarsField />
           <CameraParallax />
           <fog attach="fog" args={['#0A0E1A', 6, 12]} />
