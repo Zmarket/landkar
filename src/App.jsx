@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Hero3DScene from './components/Hero3DScene'
+import CustomCursor from './components/CustomCursor'
+import MagneticButton from './components/MagneticButton'
+import TengeRain from './components/TengeRain'
 import './index.css'
+
+gsap.registerPlugin(ScrollTrigger)
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 const IconAlert = () => (
@@ -1441,6 +1449,66 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', phone: '' })
   const [submitted, setSubmitted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const heroRef = useRef(null)
+  const hero3DRef = useRef(null)
+  const heroTextRef = useRef(null)
+  const progressRef = useRef(null)
+
+  useEffect(() => {
+    const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+
+    const ctx = gsap.context(() => {
+      // Top progress bar
+      if (progressRef.current) {
+        gsap.to(progressRef.current, {
+          scaleX: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: true },
+        })
+      }
+
+      // Hero parallax: text drifts up, 3D scene scales/fades as user scrolls past hero
+      if (heroRef.current && heroTextRef.current) {
+        gsap.to(heroTextRef.current, {
+          y: -80,
+          opacity: 0.25,
+          ease: 'none',
+          scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
+        })
+      }
+      if (heroRef.current && hero3DRef.current) {
+        gsap.to(hero3DRef.current, {
+          scale: 0.85,
+          opacity: 0.3,
+          ease: 'none',
+          scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: true },
+        })
+      }
+
+      // Section heading reveals
+      gsap.utils.toArray('.gsap-reveal').forEach((el) => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+        })
+      })
+
+      // Subtle fade-in for hero 3D scene on mount
+      if (hero3DRef.current) {
+        gsap.fromTo(
+          hero3DRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 1.6, ease: 'power2.out' }
+        )
+      }
+    })
+
+    return () => ctx.revert()
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -1458,6 +1526,19 @@ export default function App() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#0A0E1A', color: '#F1F5F9' }}>
 
+      <CustomCursor />
+
+      {/* Scroll progress bar */}
+      <div
+        aria-hidden="true"
+        className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left"
+        style={{
+          background: 'linear-gradient(90deg, #00F5A0, #7B61FF, #6B8EFF)',
+          transform: 'scaleX(0)',
+        }}
+        ref={progressRef}
+      />
+
       {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4"
         style={{ background: 'rgba(10,14,26,0.85)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
@@ -1467,11 +1548,15 @@ export default function App() {
             <a key={href} href={href} className="hover:text-white transition-colors duration-200 cursor-pointer">{label}</a>
           ))}
         </div>
-        <a href="#cta" className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-all duration-200 hover:opacity-90"
-          style={{ background: '#00F5A0', color: '#0A0E1A' }}>
+        <MagneticButton
+          href="#cta"
+          strength={0.3}
+          className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-all duration-200 hover:opacity-90"
+          style={{ background: '#00F5A0', color: '#0A0E1A' }}
+        >
           Подключить К.А.Р
           <IconArrow />
-        </a>
+        </MagneticButton>
         <button className="md:hidden text-slate-400 cursor-pointer" onClick={() => setMenuOpen(!menuOpen)} aria-label="Меню">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -1500,7 +1585,10 @@ export default function App() {
       </AnimatePresence>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden grid-bg">
+      <section ref={heroRef} className="relative min-h-screen flex items-center pt-20 overflow-hidden grid-bg">
+        <div ref={hero3DRef} className="absolute inset-0">
+          <Hero3DScene />
+        </div>
         <ParticlesBg />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
           style={{ background: 'radial-gradient(circle, rgba(0,245,160,0.08) 0%, transparent 70%)' }} />
@@ -1509,7 +1597,7 @@ export default function App() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div ref={heroTextRef}>
               <motion.div
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
                 style={{ background: 'rgba(0,245,160,0.1)', border: '1px solid rgba(0,245,160,0.2)', color: '#00F5A0' }}
@@ -1545,15 +1633,23 @@ export default function App() {
 
               <motion.div className="flex flex-wrap gap-4"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
-                <a href="#cta" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-base cursor-pointer transition-all duration-200 hover:opacity-90 glow-green"
-                  style={{ background: '#00F5A0', color: '#0A0E1A' }}>
+                <MagneticButton
+                  href="#cta"
+                  strength={0.4}
+                  className="items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-base cursor-pointer transition-all duration-200 hover:opacity-90 glow-green"
+                  style={{ background: '#00F5A0', color: '#0A0E1A' }}
+                >
                   Подключить К.А.Р
                   <IconArrow />
-                </a>
-                <a href="#modules" className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-base cursor-pointer transition-all duration-200 hover:border-[#00F5A0] hover:text-[#00F5A0]"
-                  style={{ border: '1px solid rgba(255,255,255,0.15)', color: '#CBD5E1' }}>
+                </MagneticButton>
+                <MagneticButton
+                  href="#modules"
+                  strength={0.25}
+                  className="items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-base cursor-pointer transition-all duration-200 hover:border-[#00F5A0] hover:text-[#00F5A0]"
+                  style={{ border: '1px solid rgba(255,255,255,0.15)', color: '#CBD5E1' }}
+                >
                   Все 10 модулей
-                </a>
+                </MagneticButton>
               </motion.div>
 
               <motion.div className="flex items-center gap-4 mt-8"
@@ -1576,8 +1672,9 @@ export default function App() {
             {/* Hero funnel */}
             <motion.div className="relative"
               initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
-              <div className="rounded-2xl p-6 relative overflow-hidden"
-                style={{ background: 'rgba(17,24,39,0.8)', border: '1px solid rgba(0,245,160,0.15)', backdropFilter: 'blur(12px)' }}>
+              <div className="rounded-2xl p-6 relative overflow-hidden glass-panel">
+                <div className="absolute -inset-px rounded-2xl pointer-events-none"
+                  style={{ background: 'linear-gradient(135deg, rgba(0,245,160,0.25), transparent 40%, rgba(123,97,255,0.2))', WebkitMask: 'linear-gradient(#000,#000) content-box, linear-gradient(#000,#000)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: 1 }} />
                 <div className="flex items-center justify-between mb-5">
                   <div>
                     <p className="text-xs text-slate-500 mb-0.5">К.А.Р Dashboard</p>
@@ -1660,8 +1757,9 @@ export default function App() {
         <div className="absolute inset-0 pointer-events-none grid-bg opacity-30" />
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(0,245,160,0.06) 0%, transparent 55%)' }} />
+        <TengeRain count={24} />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
 
           {/* Header */}
           <FadeIn className="mb-16">
