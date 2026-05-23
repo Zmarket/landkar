@@ -27,13 +27,15 @@ function DollarSlot({ active, scale = 1 }) {
         fontWeight: 900,
         lineHeight: 1,
         fontSize: `clamp(${48 * scale}px, ${11 * scale}vw, ${130 * scale}px)`,
-        background: active ? ACTIVE_GRADIENT : IDLE_GRADIENT,
-        WebkitBackgroundClip: 'text',
+        color: 'transparent',
         WebkitTextFillColor: 'transparent',
+        WebkitBackgroundClip: 'text',
         backgroundClip: 'text',
+        backgroundImage: active ? ACTIVE_GRADIENT : IDLE_GRADIENT,
+        backgroundRepeat: 'no-repeat',
         filter: active ? 'drop-shadow(0 0 22px rgba(0, 245, 160, 0.45))' : 'none',
-        opacity: active ? 1 : 0.22,
-        transition: 'background 0.4s ease, filter 0.4s ease, opacity 0.4s ease',
+        opacity: active ? 1 : 0.28,
+        transition: 'background-image 0.4s ease, filter 0.4s ease, opacity 0.4s ease',
       }}
       animate={{ scale: active ? 1 : 0.82 }}
       transition={{ type: 'spring', stiffness: 280, damping: 13 }}
