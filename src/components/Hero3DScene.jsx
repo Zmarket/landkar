@@ -52,8 +52,8 @@ function DollarCoin() {
     ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.1
   })
 
-  const coinRadius = 1.05
-  const coinThickness = 0.16
+  const coinRadius = 0.85
+  const coinThickness = 0.14
   const faceOffset = coinThickness / 2 + 0.002
 
   return (
@@ -94,9 +94,9 @@ function WireShell() {
     ref.current.rotation.y -= delta * 0.12
   })
   return (
-    <mesh ref={ref} scale={1.6}>
+    <mesh ref={ref} scale={1.3}>
       <icosahedronGeometry args={[1, 1]} />
-      <meshBasicMaterial color="#7B61FF" wireframe transparent opacity={0.22} />
+      <meshBasicMaterial color="#7B61FF" wireframe transparent opacity={0.18} />
     </mesh>
   )
 }
@@ -152,7 +152,7 @@ export default function Hero3DScene() {
           <directionalLight position={[5, 5, 5]} intensity={0.6} color="#00F5A0" />
           <directionalLight position={[-5, -3, -2]} intensity={0.45} color="#7B61FF" />
           <pointLight position={[0, 0, 3]} intensity={0.9} color="#6B8EFF" />
-          <group position={[2.2, 0.4, 0]}>
+          <group position={[2.7, 0.5, 0]}>
             <DollarCoin />
             <WireShell />
           </group>

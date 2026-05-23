@@ -11,9 +11,37 @@ const STAGES = [
   'К.А.Р ГОТОВ',
 ]
 
-const TOTAL_MS = 2400
-const REVEAL_HOLD_MS = 900
+const TOTAL_MS = 3600
+const REVEAL_HOLD_MS = 1000
 const EXIT_MS = 700
+
+const ACTIVE_GRADIENT = 'linear-gradient(135deg, #00F5A0 0%, #6B8EFF 50%, #7B61FF 100%)'
+const IDLE_GRADIENT = 'linear-gradient(135deg, #1f2937, #374151)'
+
+function DollarSlot({ active, scale = 1 }) {
+  return (
+    <motion.span
+      style={{
+        display: 'inline-block',
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: 900,
+        lineHeight: 1,
+        fontSize: `clamp(${48 * scale}px, ${11 * scale}vw, ${130 * scale}px)`,
+        background: active ? ACTIVE_GRADIENT : IDLE_GRADIENT,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        filter: active ? 'drop-shadow(0 0 22px rgba(0, 245, 160, 0.45))' : 'none',
+        opacity: active ? 1 : 0.22,
+        transition: 'background 0.4s ease, filter 0.4s ease, opacity 0.4s ease',
+      }}
+      animate={{ scale: active ? 1 : 0.82 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 13 }}
+    >
+      $
+    </motion.span>
+  )
+}
 
 export default function Preloader({ onDone }) {
   const [progress, setProgress] = useState(0)
@@ -58,6 +86,9 @@ export default function Preloader({ onDone }) {
   const intProgress = Math.floor(progress)
   const pctStr = String(intProgress).padStart(3, '0')
 
+  const dollarCount = progress >= 100 ? 3 : progress >= 62 ? 2 : progress >= 32 ? 1 : 0
+  const isReveal = phase === 'reveal' || phase === 'exiting'
+
   return (
     <motion.div
       className="fixed inset-0 z-[100] flex flex-col"
@@ -70,11 +101,7 @@ export default function Preloader({ onDone }) {
       animate={phase === 'exiting' ? { y: '-100%' } : { y: 0 }}
       transition={{ duration: EXIT_MS / 1000, ease: [0.76, 0, 0.24, 1] }}
     >
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-40 grid-bg"
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 pointer-events-none opacity-40 grid-bg" aria-hidden="true" />
 
       {/* Top bar */}
       <div className="relative z-10 flex items-center justify-between px-6 md:px-12 py-6">
@@ -102,74 +129,52 @@ export default function Preloader({ onDone }) {
         </AnimatePresence>
       </div>
 
-      {/* Center content */}
-      <div className="relative z-10 flex-1 flex items-center justify-center">
-        <AnimatePresence mode="wait">
-          {phase === 'loading' && (
-            <motion.div
-              key="counter"
-              className="flex flex-col items-center gap-6"
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.86, filter: 'blur(8px)' }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-            >
-              <div
-                className="font-black tabular-nums leading-none"
-                style={{
-                  fontSize: 'clamp(80px, 18vw, 220px)',
-                  color: '#F1F5F9',
-                  letterSpacing: '-0.04em',
-                }}
-              >
-                {pctStr}
-                <span style={{ color: '#00F5A0' }}>%</span>
-              </div>
-              <p className="text-xs tracking-[0.4em] text-slate-500 font-mono uppercase">
-                Контроль · Аналитика · Рост
-              </p>
-            </motion.div>
-          )}
+      {/* Center stack */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-6">
+        <div className="flex flex-col items-center gap-8">
+          {/* Counter — fades as we enter reveal */}
+          <motion.div
+            className="font-black tabular-nums leading-none"
+            style={{
+              fontSize: 'clamp(56px, 12vw, 150px)',
+              color: '#F1F5F9',
+              letterSpacing: '-0.04em',
+            }}
+            animate={{
+              opacity: isReveal ? 0 : 1,
+              y: isReveal ? -30 : 0,
+              filter: isReveal ? 'blur(8px)' : 'blur(0px)',
+            }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
+            {pctStr}
+            <span style={{ color: '#00F5A0' }}>%</span>
+          </motion.div>
 
-          {(phase === 'reveal' || phase === 'exiting') && (
-            <motion.div
-              key="reveal"
-              className="relative flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <motion.div
-                className="absolute rounded-full pointer-events-none"
-                style={{
-                  width: 420,
-                  height: 420,
-                  background:
-                    'radial-gradient(circle, rgba(0,245,160,0.35) 0%, rgba(123,97,255,0.18) 40%, transparent 70%)',
-                  filter: 'blur(20px)',
-                }}
-                animate={{ scale: [0.6, 1.15, 1] }}
-                transition={{ duration: 0.9, ease: 'easeOut' }}
-              />
-              <motion.span
-                className="font-black leading-none relative"
-                style={{
-                  fontSize: 'clamp(140px, 26vw, 320px)',
-                  background:
-                    'linear-gradient(135deg, #00F5A0 0%, #6B8EFF 50%, #7B61FF 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  filter: 'drop-shadow(0 0 24px rgba(0, 245, 160, 0.35))',
-                }}
-                animate={{ y: [10, 0], rotateZ: [-6, 0] }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-              >
-                $
-              </motion.span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Dollar row — grows in reveal */}
+          <motion.div
+            className="flex items-center"
+            style={{ gap: 'clamp(12px, 3vw, 36px)' }}
+            animate={{
+              scale: isReveal ? 1.55 : 1,
+              y: isReveal ? -40 : 0,
+            }}
+            transition={{ type: 'spring', stiffness: 180, damping: 18 }}
+          >
+            {[0, 1, 2].map((i) => (
+              <DollarSlot key={i} active={i < dollarCount} />
+            ))}
+          </motion.div>
+
+          {/* Tagline — hides in reveal */}
+          <motion.p
+            className="text-xs tracking-[0.4em] text-slate-500 font-mono uppercase text-center"
+            animate={{ opacity: isReveal ? 0 : 1 }}
+            transition={{ duration: 0.35 }}
+          >
+            Контроль · Аналитика · Рост
+          </motion.p>
+        </div>
       </div>
 
       {/* Bottom bar */}
@@ -180,10 +185,7 @@ export default function Preloader({ onDone }) {
             {pctStr} / 100
           </span>
         </div>
-        <div
-          className="relative h-[2px] w-full overflow-hidden"
-          style={{ background: 'rgba(255,255,255,0.08)' }}
-        >
+        <div className="relative h-[2px] w-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
           <motion.div
             className="absolute inset-y-0 left-0"
             style={{
