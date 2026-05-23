@@ -6,6 +6,7 @@ import Hero3DScene from './components/Hero3DScene'
 import CustomCursor from './components/CustomCursor'
 import MagneticButton from './components/MagneticButton'
 import TengeRain from './components/TengeRain'
+import Preloader from './components/Preloader'
 import './index.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -1449,6 +1450,7 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', phone: '' })
   const [submitted, setSubmitted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [bootDone, setBootDone] = useState(false)
   const heroRef = useRef(null)
   const hero3DRef = useRef(null)
   const heroTextRef = useRef(null)
@@ -1525,6 +1527,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#0A0E1A', color: '#F1F5F9' }}>
+
+      <AnimatePresence>
+        {!bootDone && <Preloader key="preloader" onDone={() => setBootDone(true)} />}
+      </AnimatePresence>
 
       <CustomCursor />
 

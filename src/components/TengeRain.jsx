@@ -6,11 +6,11 @@ function makeDrops(count) {
     drops.push({
       id: i,
       left: Math.random() * 100,
-      size: 18 + Math.random() * 38,
-      duration: 8 + Math.random() * 9,
-      delay: -Math.random() * 12,
-      drift: (Math.random() - 0.5) * 60,
-      rotate: (Math.random() - 0.5) * 180,
+      size: 18 + Math.random() * 42,
+      duration: 7 + Math.random() * 8,
+      delay: -Math.random() * 18,
+      drift: (Math.random() - 0.5) * 80,
+      rotate: (Math.random() - 0.5) * 220,
       opacity: 0.18 + Math.random() * 0.32,
       tone: Math.random() > 0.7 ? 'gold' : 'green',
     })
@@ -18,29 +18,44 @@ function makeDrops(count) {
   return drops
 }
 
-export default function TengeRain({ count = 22 }) {
+export default function TengeRain({ count = 42 }) {
   const [active, setActive] = useState(false)
-  const sectionRef = useRef(null)
+  const containerRef = useRef(null)
   const [drops] = useState(() => makeDrops(count))
+  const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    if (!sectionRef.current) return
+    if (!containerRef.current) return
     const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduce) return
+
+    const el = containerRef.current
+
+    const ro = new ResizeObserver(() => {
+      setHeight(el.offsetHeight)
+    })
+    ro.observe(el)
+    setHeight(el.offsetHeight)
 
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) setActive(e.isIntersecting)
       },
-      { threshold: 0.05 }
+      { threshold: 0.02 }
     )
-    io.observe(sectionRef.current)
-    return () => io.disconnect()
+    io.observe(el)
+
+    return () => {
+      ro.disconnect()
+      io.disconnect()
+    }
   }, [])
+
+  const fallDistance = Math.max(height + 220, 1200)
 
   return (
     <div
-      ref={sectionRef}
+      ref={containerRef}
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none overflow-hidden"
       style={{ zIndex: 0 }}
@@ -63,6 +78,7 @@ export default function TengeRain({ count = 22 }) {
                 : '0 0 14px rgba(0, 245, 160, 0.45)',
             '--tenge-drift': `${d.drift}px`,
             '--tenge-rot': `${d.rotate}deg`,
+            '--fall-distance': `${fallDistance}px`,
           }}
         >
           ₸

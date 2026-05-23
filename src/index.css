@@ -130,21 +130,17 @@ body {
 
 @keyframes tenge-fall {
   0% {
-    transform: translate3d(0, -20vh, 0) rotate(0deg);
+    transform: translate3d(0, -120px, 0) rotate(0deg);
     opacity: 0;
   }
-  8% {
+  6% {
     opacity: 1;
   }
-  60% {
+  88% {
     opacity: 1;
-  }
-  92% {
-    opacity: 0.4;
-    transform: translate3d(var(--tenge-drift, 0px), 105vh, 0) rotate(var(--tenge-rot, 0deg));
   }
   100% {
-    transform: translate3d(var(--tenge-drift, 0px), 112vh, 0) rotate(var(--tenge-rot, 0deg));
+    transform: translate3d(var(--tenge-drift, 0px), var(--fall-distance, 1500px), 0) rotate(var(--tenge-rot, 0deg));
     opacity: 0;
   }
 }
