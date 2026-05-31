@@ -2137,35 +2137,60 @@ export default function App() {
         <div className="max-w-5xl mx-auto px-6 md:px-12">
           <FadeIn className="text-center mb-14">
             <p className="text-sm font-semibold tracking-widest uppercase mb-3" style={{ color: '#7B61FF' }}>Стоимость</p>
-            <h2 className="text-3xl md:text-4xl font-black text-white">Один тариф — весь функционал</h2>
-            <p className="text-slate-400 mt-3">Тестовая неделя бесплатно — все 10 модулей запускаются сразу</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white">Три формата работы</h2>
+            <p className="text-slate-400 mt-3">От доступа к системе до личного участия эксперта — выбираете уровень вовлечённости</p>
+            <div className="mt-6 inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full"
+              style={{ background: 'rgba(0,245,160,0.1)', border: '1px solid rgba(0,245,160,0.35)' }}>
+              <motion.span
+                className="w-2.5 h-2.5 rounded-full bg-[#00F5A0] shrink-0"
+                animate={{ scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 1.5 }}
+              />
+              <span className="text-sm font-bold" style={{ color: '#00F5A0' }}>
+                Первая неделя подключения — бесплатно, на любом тарифе
+              </span>
+            </div>
           </FadeIn>
 
           <div className="grid md:grid-cols-3 gap-6 items-stretch">
 
-            {/* Coming soon — Старт */}
+            {/* TIER 1 — К.А.Р Старт */}
             <FadeIn delay={0}>
-              <div className="relative rounded-2xl p-6 h-full flex flex-col opacity-40 cursor-not-allowed select-none"
-                style={{ background: 'rgba(17,24,39,0.4)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="absolute inset-0 rounded-2xl flex items-center justify-center z-10">
-                  <div className="px-4 py-2 rounded-full text-xs font-bold tracking-widest"
-                    style={{ background: 'rgba(17,24,39,0.95)', border: '1px solid rgba(255,255,255,0.1)', color: '#64748B' }}>
-                    COMING SOON
+              <div className="relative rounded-2xl p-8 h-full flex flex-col transition-all duration-300 hover:-translate-y-1"
+                style={{ background: 'rgba(17,24,39,0.5)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <p className="text-sm font-semibold tracking-wide mb-3 text-slate-300">К.А.Р Старт</p>
+                <div className="flex items-center gap-3 mb-2 flex-wrap">
+                  <div className="px-3 py-1 rounded-lg text-sm font-black"
+                    style={{ background: 'rgba(0,245,160,0.15)', color: '#00F5A0', border: '1px solid rgba(0,245,160,0.3)' }}>
+                    1-я неделя — 0 ₸
+                  </div>
+                  <div className="flex items-baseline gap-1 flex-wrap">
+                    <span className="text-3xl font-black text-white leading-none whitespace-nowrap">99 000 ₸</span>
+                    <span className="text-slate-400 text-sm font-medium">/мес</span>
                   </div>
                 </div>
-                <p className="text-sm font-medium mb-1 text-slate-500">Старт</p>
-                <p className="text-3xl font-black text-slate-600 mb-6">—</p>
-                <ul className="space-y-3 flex-1 mb-6">
-                  {['До 3 менеджеров', 'Базовые модули', 'Ежемесячные отчёты'].map((f, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm text-slate-600">
-                      <IconCheckLg />{f}
+                <p className="text-xs text-slate-500 mb-6">Контроль и аналитика своими силами.</p>
+                <ul className="space-y-2.5 flex-1 mb-6">
+                  {[
+                    'Все модули К.А.Р, кроме «Обучения и развития»',
+                    'Контроль CRM и дисциплины 24/7',
+                    'Управление выручкой и дожим',
+                    'Аналитика и диагностика воронки',
+                    'Анализ переписок и звонков',
+                    'Автоматические действия и follow-up',
+                    'Визуализация и дашборд',
+                    'Контроль без участия собственника',
+                  ].map((f, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm text-slate-200">
+                      <span className="shrink-0 mt-0.5" style={{ color: '#00F5A0' }}><IconCheckLg /></span>
+                      {f}
                     </li>
                   ))}
                 </ul>
-                <div className="w-full py-3 rounded-xl text-center text-sm text-slate-600"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  Скоро
-                </div>
+                <a href="#cta"
+                  className="w-full py-3.5 rounded-xl font-bold text-sm text-center cursor-pointer transition-all duration-200 hover:opacity-90 block"
+                  style={{ background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)' }}>
+                  Начать с К.А.Р
+                </a>
               </div>
             </FadeIn>
 
@@ -2187,26 +2212,16 @@ export default function App() {
                 />
 
                 <div className="mb-2">
-                  <p className="text-sm font-semibold tracking-wide mb-3" style={{ color: '#00F5A0' }}>Полный доступ</p>
+                  <p className="text-sm font-semibold tracking-wide mb-3" style={{ color: '#00F5A0' }}>К.А.Р + Эксперт</p>
 
-                  {/* Free trial — 1st week */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="px-3 py-1 rounded-lg text-sm font-black"
-                      style={{ background: 'rgba(0,245,160,0.15)', color: '#00F5A0', border: '1px solid rgba(0,245,160,0.3)' }}>
-                      1-я неделя — 0 ₸
-                    </div>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2" className="w-4 h-4 shrink-0">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                    <div className="flex items-baseline gap-1 flex-wrap">
-                      <span className="text-3xl font-black text-white leading-none whitespace-nowrap">300 000 ₸</span>
-                      <span className="text-slate-400 text-sm font-medium">/мес</span>
-                    </div>
+                  <div className="flex items-baseline gap-1 flex-wrap mb-2">
+                    <span className="text-3xl font-black text-white leading-none whitespace-nowrap">300 000 ₸</span>
+                    <span className="text-slate-400 text-sm font-medium">/мес</span>
                   </div>
-                  <p className="text-xs text-slate-500">≈ цена одного менеджера. К.А.Р заменяет целый отдел контроля.</p>
+                  <p className="text-xs text-slate-500">Система + я как ваш внешний РОП с 10-летним опытом.</p>
                 </div>
 
-                {/* Free trial highlight */}
+                {/* Expert involvement highlight */}
                 <div className="my-4 px-4 py-3 rounded-xl flex items-center gap-3"
                   style={{ background: 'rgba(0,245,160,0.08)', border: '1px solid rgba(0,245,160,0.2)' }}>
                   <motion.div
@@ -2214,24 +2229,19 @@ export default function App() {
                     animate={{ scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 1.5 }}
                   />
                   <div>
-                    <p className="text-sm font-bold text-white">Первая неделя — бесплатно</p>
-                    <p className="text-xs text-slate-400">Все 10 модулей активны сразу — без ограничений</p>
+                    <p className="text-sm font-bold text-white">Контроль — без вашего участия</p>
+                    <p className="text-xs text-slate-400">Я перевожу сигналы К.А.Р в решения и действия</p>
                   </div>
                 </div>
 
                 <ul className="space-y-2.5 flex-1 mb-6">
                   {[
-                    'Все 10 модулей системы К.А.Р',
-                    'Контроль CRM и дисциплины 24/7',
-                    'Управление выручкой и дожим',
-                    'Аналитика и диагностика воронки',
-                    'Анализ переписок и звонков',
-                    'Обучение и развитие менеджеров',
-                    'Автоматические действия',
-                    'Рекрутинг и подбор кандидатов',
-                    'Управление системой продаж',
-                    'Визуализация и дашборд',
-                    'Контроль без участия собственника',
+                    'Всё из тарифа «К.А.Р Старт»',
+                    'Модуль «Обучение и развитие» менеджеров',
+                    'Рекрутинг и подбор продавцов',
+                    'Личное экспертное сопровождение',
+                    'Разбираю данные К.А.Р и говорю, что делать',
+                    'Перевожу систему в решения и действия',
                   ].map((f, j) => (
                     <li key={j} className="flex items-start gap-2 text-sm text-slate-200">
                       <span className="shrink-0 mt-0.5" style={{ color: '#00F5A0' }}><IconCheckLg /></span>
@@ -2242,34 +2252,41 @@ export default function App() {
                 <a href="#cta"
                   className="w-full py-3.5 rounded-xl font-bold text-sm text-center cursor-pointer transition-all duration-200 hover:opacity-90 glow-green block"
                   style={{ background: '#00F5A0', color: '#0A0E1A' }}>
-                  Начать бесплатную неделю
+                  Обсудить сопровождение
                 </a>
               </div>
             </FadeIn>
 
-            {/* Coming soon — Премиум */}
+            {/* TIER 3 — Премиум */}
             <FadeIn delay={0.2}>
-              <div className="relative rounded-2xl p-6 h-full flex flex-col opacity-40 cursor-not-allowed select-none"
-                style={{ background: 'rgba(17,24,39,0.4)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="absolute inset-0 rounded-2xl flex items-center justify-center z-10">
-                  <div className="px-4 py-2 rounded-full text-xs font-bold tracking-widest"
-                    style={{ background: 'rgba(17,24,39,0.95)', border: '1px solid rgba(255,255,255,0.1)', color: '#64748B' }}>
-                    COMING SOON
-                  </div>
+              <div className="relative rounded-2xl p-8 h-full flex flex-col transition-all duration-300 hover:-translate-y-1"
+                style={{ background: 'rgba(123,97,255,0.05)', border: '1px solid rgba(123,97,255,0.3)' }}>
+                <p className="text-sm font-semibold tracking-wide mb-3" style={{ color: '#7B61FF' }}>Премиум</p>
+                <div className="flex items-baseline gap-1 flex-wrap mb-2">
+                  <span className="text-3xl font-black text-white leading-none whitespace-nowrap">от 500 000 ₸</span>
+                  <span className="text-slate-400 text-sm font-medium">/мес</span>
                 </div>
-                <p className="text-sm font-medium mb-1 text-slate-500">Премиум</p>
-                <p className="text-3xl font-black text-slate-600 mb-6">—</p>
-                <ul className="space-y-3 flex-1 mb-6">
-                  {['Мультиаккаунт', 'Кастомные интеграции', 'Персональный менеджер'].map((f, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm text-slate-600">
-                      <IconCheckLg />{f}
+                <p className="text-xs text-slate-500 mb-6">Личное part-time участие в вашем отделе продаж.</p>
+                <ul className="space-y-2.5 flex-1 mb-6">
+                  {[
+                    'Всё из тарифа «К.А.Р + Эксперт»',
+                    'Part-time участие в работе вашего ОП',
+                    'Глубокое погружение, работа на результат',
+                    'Перестройка процессов под ваши цели',
+                    'Личное ведение ключевых сделок и команды',
+                  ].map((f, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm text-slate-200">
+                      <span className="shrink-0 mt-0.5" style={{ color: '#7B61FF' }}><IconCheckLg /></span>
+                      {f}
                     </li>
                   ))}
                 </ul>
-                <div className="w-full py-3 rounded-xl text-center text-sm text-slate-600"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  Скоро
-                </div>
+                <p className="text-xs text-slate-500 mb-4">Финальная стоимость зависит от задач и текущего состояния отдела продаж.</p>
+                <a href="#cta"
+                  className="w-full py-3.5 rounded-xl font-bold text-sm text-center cursor-pointer transition-all duration-200 hover:opacity-90 block"
+                  style={{ background: 'rgba(123,97,255,0.15)', color: '#fff', border: '1px solid rgba(123,97,255,0.4)' }}>
+                  Рассчитать под задачи
+                </a>
               </div>
             </FadeIn>
 
@@ -2294,7 +2311,7 @@ export default function App() {
               <span style={{ color: '#00F5A0' }}>воронки от К.А.Р</span>
             </h2>
             <p className="text-slate-400 mb-10 text-lg leading-relaxed">
-              Система К.А.Р проанализирует вашу воронку за 48 часов и покажет, где вы теряете деньги прямо сейчас.
+              Система К.А.Р проанализирует вашу воронку за 15 минут и покажет, где вы теряете деньги прямо сейчас.
             </p>
             {!submitted ? (
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
